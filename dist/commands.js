@@ -1,6 +1,6 @@
 /*!
- * Name: -commands
- * Id: -commands
+ * Name: commands
+ * Id: commands
  * Version: 1.0.2
  * Description: Show some predefined contents in Mission Control after some command-like messages from the user (for example /privacy, /terms, etc).
  * Author: Guido Bellomo (https://github.com/guidone)
