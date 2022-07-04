@@ -1,6 +1,6 @@
 {
   "name": "red-bot-commands",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Show some predefined contents in Mission Control after some command-like messages from the user (for example /privacy, /terms, etc).",
   "main": "index.js",
   "author": {

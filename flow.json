@@ -1,1 +1,475 @@
-[{"id":"4ae37f7c.a3b2d","type":"subflow","name":"Commands","info":"Show some predefined contents defined in **Mission Control** after some command-like messages from the user (for example `/privacy`, `/terms`, etc).\n\nEdit the content [here](/mc/configuration-commands).","category":"RedBot Flows","in":[{"x":60,"y":120,"wires":[{"id":"713c0557.e8f73c"}]}],"out":[{"x":1380,"y":100,"wires":[{"id":"73981e80.0fa4d","port":0}]},{"x":840,"y":300,"wires":[{"id":"713c0557.e8f73c","port":1},{"id":"f105aa1c.ddeba8","port":1},{"id":"23b96bda.f03d04","port":1}]}],"env":[],"color":"#ff6633","outputLabels":["Command Found","Pass Thru"],"icon":"font-awesome/fa-terminal"},{"id":"8e5ea84d.c2ba28","type":"mc-configuration","z":"4ae37f7c.a3b2d","namespace":"commands","debug":true,"x":170,"y":240,"wires":[[]]},{"id":"713c0557.e8f73c","type":"chatbot-rules","z":"4ae37f7c.a3b2d","name":"","rules":[{"type":"anyCommand"},{"type":"catchAll"}],"outputs":2,"x":230,"y":120,"wires":[["f105aa1c.ddeba8"],[]]},{"id":"f105aa1c.ddeba8","type":"function","z":"4ae37f7c.a3b2d","name":"Find slug by comment","func":"const commands = context.global.get('commands_commands');\nconst userMessage = msg.payload.content;\n\nconst found = commands.find(item => item.command === userMessage);\n\nif (found != null) {\n  console.log('trovato', found)\n  msg.query = found.slug;\n  send([msg, null]);\n} else {\n  send([null, msg]);\n}\n","outputs":2,"noerr":0,"x":490,"y":100,"wires":[["23b96bda.f03d04"],[]],"outputLabels":["Slug found","Slug not found"]},{"id":"23b96bda.f03d04","type":"mc-content","z":"4ae37f7c.a3b2d","query":"","language":"","failbackLanguage":"en","chain":false,"x":750,"y":100,"wires":[["6fe0cdee.bf17a4"],[]]},{"id":"6fe0cdee.bf17a4","type":"chatbot-message","z":"4ae37f7c.a3b2d","name":"Show content","message":[{"message":"{{payload.body}}"}],"language":"none","x":1000,"y":100,"wires":[["73981e80.0fa4d"]]},{"id":"73981e80.0fa4d","type":"chatbot-params","z":"4ae37f7c.a3b2d","name":"","params":[{"platform":"telegram","name":"parseMode","value":"Markdown"},{"platform":"all","name":"messageFlag","value":"answer"}],"outputs":1,"x":1200,"y":100,"wires":[[]]}]
+[
+  {
+      "id": "4ae37f7c.a3b2d",
+      "type": "subflow",
+      "name": "Commands",
+      "info": "Show some predefined contents defined in **Mission Control** after some command-like messages from the user (for example `/privacy`, `/terms`, etc).\n\nEdit the content [here](/mc/configuration-commands).",
+      "category": "RedBot Flows",
+      "in": [
+          {
+              "x": 60,
+              "y": 120,
+              "wires": [
+                  {
+                      "id": "713c0557.e8f73c"
+                  }
+              ]
+          }
+      ],
+      "out": [
+          {
+              "x": 1380,
+              "y": 100,
+              "wires": [
+                  {
+                      "id": "73981e80.0fa4d",
+                      "port": 0
+                  }
+              ]
+          },
+          {
+              "x": 840,
+              "y": 300,
+              "wires": [
+                  {
+                      "id": "713c0557.e8f73c",
+                      "port": 1
+                  },
+                  {
+                      "id": "f105aa1c.ddeba8",
+                      "port": 1
+                  },
+                  {
+                      "id": "23b96bda.f03d04",
+                      "port": 1
+                  }
+              ]
+          }
+      ],
+      "env": [
+          {
+              "name": "chatbotId",
+              "type": "str",
+              "value": "",
+              "ui": {
+                  "label": {
+                      "en-US": "ChatbotId"
+                  },
+                  "type": "input",
+                  "opts": {
+                      "types": [
+                          "str"
+                      ]
+                  }
+              }
+          },
+          {
+              "name": "failbackLanguage",
+              "type": "str",
+              "value": "en",
+              "ui": {
+                  "label": {
+                      "en-US": "Fallbak language"
+                  },
+                  "type": "select",
+                  "opts": {
+                      "opts": [
+                          {
+                              "l": {
+                                  "en-US": "Arabic"
+                              },
+                              "v": "ar"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Bengali"
+                              },
+                              "v": "bn"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Catalan"
+                              },
+                              "v": "ca"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Danish"
+                              },
+                              "v": "da"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "German"
+                              },
+                              "v": "de"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Greek"
+                              },
+                              "v": "el"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "English"
+                              },
+                              "v": "en"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Spanish"
+                              },
+                              "v": "es"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Basque"
+                              },
+                              "v": "eu"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Persian"
+                              },
+                              "v": "fa"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Finnish"
+                              },
+                              "v": "fi"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "French"
+                              },
+                              "v": "fr"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Irish"
+                              },
+                              "v": "ga"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Galician"
+                              },
+                              "v": "gl"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Hindi"
+                              },
+                              "v": "hi"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Hungarian"
+                              },
+                              "v": "hu"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Armenian"
+                              },
+                              "v": "hy"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Italian"
+                              },
+                              "v": "it"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Japanese"
+                              },
+                              "v": "ja"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Dutch"
+                              },
+                              "v": "nl"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Norwegian"
+                              },
+                              "v": "no"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Portuguese"
+                              },
+                              "v": "pt"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Romanian"
+                              },
+                              "v": "ro"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Russian"
+                              },
+                              "v": "ru"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Slovenian"
+                              },
+                              "v": "sl"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Slovenian"
+                              },
+                              "v": "sv"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Tamil"
+                              },
+                              "v": "ta"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Thai"
+                              },
+                              "v": "th"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Tagalog"
+                              },
+                              "v": "tl"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Turkish"
+                              },
+                              "v": "tr"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Ukrainian"
+                              },
+                              "v": "uk"
+                          },
+                          {
+                              "l": {
+                                  "en-US": "Chinese"
+                              },
+                              "v": "zh"
+                          }
+                      ]
+                  }
+              }
+          }
+      ],
+      "meta": {
+          "module": "redbot-commands",
+          "type": "redbot-commands",
+          "version": "1.1.0",
+          "author": "Guido Bellomo <guido.bellomo@gmail.com>"
+      },
+      "color": "#ff6633",
+      "outputLabels": [
+          "Command Found",
+          "Pass Thru"
+      ],
+      "icon": "font-awesome/fa-terminal"
+  },
+  {
+      "id": "8e5ea84d.c2ba28",
+      "type": "mc-configuration",
+      "z": "4ae37f7c.a3b2d",
+      "namespace": "commands",
+      "chatbotId": "",
+      "debug": true,
+      "loadOnStartup": false,
+      "inputs": 1,
+      "x": 550,
+      "y": 440,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "713c0557.e8f73c",
+      "type": "chatbot-rules",
+      "z": "4ae37f7c.a3b2d",
+      "name": "",
+      "rules": [
+          {
+              "type": "anyCommand"
+          },
+          {
+              "type": "catchAll"
+          }
+      ],
+      "outputs": 2,
+      "x": 230,
+      "y": 120,
+      "wires": [
+          [
+              "f105aa1c.ddeba8"
+          ],
+          []
+      ]
+  },
+  {
+      "id": "f105aa1c.ddeba8",
+      "type": "function",
+      "z": "4ae37f7c.a3b2d",
+      "name": "Find slug by comment",
+      "func": "const commands = context.global.get('commands_commands');\nconst userMessage = msg.payload.content;\n\nconst found = commands.find(item => item.command === userMessage);\n\nif (found != null) {\n  msg.query = found.slug;\n  msg.payload.failbackLanguage = env.get('failbackLanguage');\n  node.send([msg, null]);\n} else {\n  node.send([null, msg]);\n}\n",
+      "outputs": 2,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 490,
+      "y": 100,
+      "wires": [
+          [
+              "23b96bda.f03d04"
+          ],
+          []
+      ],
+      "outputLabels": [
+          "Slug found",
+          "Slug not found"
+      ]
+  },
+  {
+      "id": "23b96bda.f03d04",
+      "type": "mc-content",
+      "z": "4ae37f7c.a3b2d",
+      "query": "",
+      "language": "",
+      "failbackLanguage": "",
+      "chain": false,
+      "x": 750,
+      "y": 100,
+      "wires": [
+          [
+              "6fe0cdee.bf17a4"
+          ],
+          []
+      ]
+  },
+  {
+      "id": "6fe0cdee.bf17a4",
+      "type": "chatbot-message",
+      "z": "4ae37f7c.a3b2d",
+      "name": "Show content",
+      "message": [
+          {
+              "message": "{{payload.body}}"
+          }
+      ],
+      "language": "none",
+      "x": 1000,
+      "y": 100,
+      "wires": [
+          [
+              "73981e80.0fa4d"
+          ]
+      ]
+  },
+  {
+      "id": "73981e80.0fa4d",
+      "type": "chatbot-params",
+      "z": "4ae37f7c.a3b2d",
+      "name": "",
+      "params": [
+          {
+              "platform": "telegram",
+              "name": "parseMode",
+              "value": "Markdown"
+          },
+          {
+              "platform": "all",
+              "name": "messageFlag",
+              "value": "answer"
+          }
+      ],
+      "outputs": 1,
+      "x": 1200,
+      "y": 100,
+      "wires": [
+          []
+      ]
+  },
+  {
+      "id": "cf8d947109197499",
+      "type": "inject",
+      "z": "4ae37f7c.a3b2d",
+      "name": "",
+      "props": [],
+      "repeat": "",
+      "crontab": "",
+      "once": true,
+      "onceDelay": 0.1,
+      "topic": "",
+      "x": 90,
+      "y": 440,
+      "wires": [
+          [
+              "ac19800db8876d1a"
+          ]
+      ]
+  },
+  {
+      "id": "ac19800db8876d1a",
+      "type": "function",
+      "z": "4ae37f7c.a3b2d",
+      "name": "Set chatbotId",
+      "func": "return {\n    ...msg,\n    chatbotId: env.get('chatbotId')\n};",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 280,
+      "y": 440,
+      "wires": [
+          [
+              "8e5ea84d.c2ba28"
+          ]
+      ]
+  },
+  {
+      "id": "11b0fa59da83b941",
+      "type": "subflow:4ae37f7c.a3b2d",
+      "z": "7a92ac99149edebb",
+      "name": "",
+      "env": [
+          {
+              "name": "chatbotId",
+              "value": "chat-user-id",
+              "type": "str"
+          },
+          {
+              "name": "failbackLanguage",
+              "value": "it",
+              "type": "str"
+          }
+      ],
+      "x": 430,
+      "y": 200,
+      "wires": [
+          [
+              "a0ddcb5ab4cbc9fe"
+          ],
+          [
+              "2ce0bb14274da349"
+          ]
+      ]
+  }
+]

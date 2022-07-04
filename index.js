@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { plug } from 'code-plug';
 
 import { withConfigurationPage, HelpElements } from '../../src/components';
