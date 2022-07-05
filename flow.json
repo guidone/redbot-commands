@@ -269,12 +269,28 @@
                       ]
                   }
               }
+          },
+          {
+              "name": "updateMenu",
+              "type": "bool",
+              "value": "false",
+              "ui": {
+                  "label": {
+                      "en-US": "Update menu"
+                  },
+                  "type": "input",
+                  "opts": {
+                      "types": [
+                          "bool"
+                      ]
+                  }
+              }
           }
       ],
       "meta": {
           "module": "redbot-commands",
           "type": "redbot-commands",
-          "version": "1.1.0",
+          "version": "1.2.0",
           "author": "Guido Bellomo <guido.bellomo@gmail.com>"
       },
       "color": "#ff6633",
@@ -296,7 +312,9 @@
       "x": 550,
       "y": 440,
       "wires": [
-          []
+          [
+              "779e40f75574d258"
+          ]
       ]
   },
   {
@@ -445,6 +463,72 @@
       ]
   },
   {
+      "id": "779e40f75574d258",
+      "type": "function",
+      "z": "4ae37f7c.a3b2d",
+      "name": "Get all commands",
+      "func": "const { payload } = msg;\n\nconst slugs = payload.commands.map(command => command.slug);\n\nconsole.log('slugs', slugs)\n\nif (env.get('updateMenu')) {\n    return {\n        ...msg,\n        variables: {\n            slugs,\n            chatbotId: env.get('chatbotId')\n        }\n    };\n}",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 290,
+      "y": 520,
+      "wires": [
+          [
+              "a65a03afdc4ce6ba"
+          ]
+      ]
+  },
+  {
+      "id": "a65a03afdc4ce6ba",
+      "type": "mc-graphql",
+      "z": "4ae37f7c.a3b2d",
+      "name": "",
+      "query": "query($slugs: [String], $chatbotId: String) {\n  contents(slugs: $slugs, chatbotId: $chatbotId) {\n    id\n    title\n    body\n    slug\n    createdAt\n    fields {\n      name\n      value\n    }\n  }\n}\n",
+      "debug": true,
+      "noerr": 0,
+      "x": 540,
+      "y": 520,
+      "wires": [
+          [
+              "c88c1d928e2de001"
+          ],
+          [],
+          []
+      ]
+  },
+  {
+      "id": "2e4e7ece198db43e",
+      "type": "chatbot-telegram-menu",
+      "z": "4ae37f7c.a3b2d",
+      "bot": "",
+      "items": [],
+      "x": 1040,
+      "y": 500,
+      "wires": []
+  },
+  {
+      "id": "c88c1d928e2de001",
+      "type": "function",
+      "z": "4ae37f7c.a3b2d",
+      "name": "Prepare commands",
+      "func": "const commands = context.global.get('commands_commands');\nconst failbackLanguage = env.get('failbackLanguage');\n\nconst { payload } = msg;\n\nconst getTitleFromSlug = slug => {\n    let content;\n    content = payload.contents\n        .find(content => content.language === failbackLanguage && content.slug === slug) \n        ||\n        payload.contents.find(content => content.slug === slug);\n\n    return content != null ? content.title : 'No title';\n}; \n\nconst telegramCommands = commands\n    .map(command => ({\n        command: command.command, \n        description: getTitleFromSlug(command.slug)\n    }));\n\nreturn {\n    ...msg,\n    commands: telegramCommands\n};",
+      "outputs": 1,
+      "noerr": 0,
+      "initialize": "",
+      "finalize": "",
+      "libs": [],
+      "x": 810,
+      "y": 500,
+      "wires": [
+          [
+              "2e4e7ece198db43e"
+          ]
+      ]
+  },
+  {
       "id": "11b0fa59da83b941",
       "type": "subflow:4ae37f7c.a3b2d",
       "z": "7a92ac99149edebb",
@@ -459,6 +543,11 @@
               "name": "failbackLanguage",
               "value": "it",
               "type": "str"
+          },
+          {
+              "name": "updateMenu",
+              "value": "true",
+              "type": "bool"
           }
       ],
       "x": 430,
