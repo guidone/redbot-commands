@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { Button, Form, FormControl, ButtonToolbar, FormGroup, ControlLabel, HelpBlock } from 'rsuite';
 
 //import CollectionEditor from '../../../src/components/collection-editor';
@@ -10,7 +11,7 @@ import FormCommand from './form-command';
 
 
 
-export default ({
+const CommandsConfiguration = ({
   value,
   onSubmit = () => { },
   disabled = false
@@ -81,3 +82,13 @@ export default ({
     </div>
   );
 };
+CommandsConfiguration.propTypes = {
+  onSubmit: PropTypes.func,
+  disabled: PropTypes.bool,
+  value: PropTypes.arrayOf(PropTypes.shape({
+    command: PropTypes.string,
+    slug: PropTypes.string
+  }))
+};
+
+export default CommandsConfiguration;

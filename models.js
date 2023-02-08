@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Schema } from 'rsuite';
 
-const { StringType, ArrayType, ObjectType, DateType } = Schema.Types;
+const { StringType, ArrayType, ObjectType } = Schema.Types;
 
 const commands = Schema.Model({
   commands: ArrayType().of(ObjectType()
@@ -13,7 +13,6 @@ const commands = Schema.Model({
           'Command should start with "/"'
         ),
       slug: StringType()
-        .isRequired('Specifig a slug (shortcut) for a content')
     }))
     .addRule(
       value => {
